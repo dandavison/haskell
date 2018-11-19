@@ -51,10 +51,11 @@ evaluateCell key sheet = Map.insert key (Evaluated value) sheet
   where
     value = if isNumeric unevaluated
             then (read unevaluated :: Float)
-            else function floats
+            else evaluate unevaluated
     Just (Unevaluated unevaluated) = Map.lookup key sheet
+    evaluate unevaluated = function evaluatedReferences
     function = getFunction unevaluated
-    floats = [getEvaluated ref (evaluateCell ref sheet) | ref <- getReferences unevaluated]
+    evaluatedReferences = [getEvaluated ref (evaluateCell ref sheet) | ref <- getReferences unevaluated]
     getEvaluated string sheet = case Map.lookup string sheet of
       Just (Evaluated float) -> float
 
