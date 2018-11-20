@@ -7,7 +7,7 @@ import Test.Hspec (hspec, describe, it, shouldBe)
 
 -- The API called for in the exercise
 isPangram :: String -> Bool
-isPangram string = isPangram' string "abcdefghijklmnopqrstuvwxyz"
+isPangram string = isPangram' string ['a'..'z']
 
 -- A more general function that allows the alphabet to be specified as a string
 isPangram' :: String -> String -> Bool
