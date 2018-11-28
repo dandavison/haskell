@@ -5,13 +5,9 @@ import Data.List (elemIndex)
 
 collatz :: Integer -> Maybe Integer
 collatz n
-  | n >= 1 = toInteger <$> elemIndex 1 (collatzSequence n)
+  | n >= 1 = toInteger <$> elemIndex 1 (iterate collatzMap n)
   | otherwise = Nothing
-
-
-collatzSequence :: Integer -> [Integer]
-collatzSequence n = n : (collatzSequence next)
   where
-    next
+    collatzMap n
       | even n = n `div` 2
       | otherwise = 3 * n + 1
