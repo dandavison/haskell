@@ -1,3 +1,4 @@
+import Data.List (elemIndex)
 import qualified Data.Set as Set
 import Data.Set (Set)
 import System.IO (getLine, isEOF)
@@ -45,6 +46,20 @@ firstRepeatedCumulativeSum values =
   firstRepeatedValue (cumulativeSum 0 (cycle values)) (Set.empty)
 
 
+firstTrajectoryReturningToZero :: (Num a, Eq a) => [a] -> Maybe Int
+firstTrajectoryReturningToZero values =
+  whichMin (map (elemIndex 0) (getTrajectories values))
+
+
+getTrajectories :: Num a => [a] -> [[a]]
+getTrajectories values =
+  map (\i -> (take i (repeat (-1))) ++ cumulativeSum 0 (drop i (cycle values))) [0..((length values) - 1)]
+
+
+whichMin :: Ord a => [a] -> Maybe Int
+whichMin values = elemIndex (minimum values) values
+
+
 main :: IO ()
 main = do
   -- values <- getValues []
@@ -53,3 +68,4 @@ main = do
   print $ foldr (+) 0 values
   -- part 2
   print $ firstRepeatedCumulativeSum values
+  print $ firstTrajectoryReturningToZero values
