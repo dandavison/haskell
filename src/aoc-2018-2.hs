@@ -11,21 +11,30 @@ getInput = do
 parseLine line = line
 
 
-processInput input =
-  (Map.toList . tabulate) <$> input
+processInput :: Ord a => [[a]] -> Int
+processInput lists =
+  (countListsWithMultiplicity 2 lists) * (countListsWithMultiplicity 3 lists)
 
 
-tabulate :: Ord a => [a] -> Map a Integer
-tabulate = tabulate' Map.empty
+countListsWithMultiplicity :: Ord a => Integer -> [[a]] -> Int
+countListsWithMultiplicity n lists =
+  length [list | list <- lists, hasMultiplicity n list]
+  where
+    hasMultiplicity n list = any (\(el, count) -> count == n) (Map.toList $ countElements list)
 
 
-tabulate' :: Ord a => Map a Integer -> [a] -> Map a Integer
-tabulate' counts (x:xs)  = tabulate' (increment x counts) xs
+countElements :: Ord a => [a] -> Map a Integer
+countElements = countElements' Map.empty
+
+
+countElements' :: Ord a => Map a Integer -> [a] -> Map a Integer
+countElements' counts (x:xs)  = countElements' (increment x counts) xs
   where
     increment x counts = Map.insert x (1 + (fromMaybe 0 (counts !? x))) counts
-tabulate' counts [] = counts
+countElements' counts [] = counts
 
 
 main = do
   input <- getInput
-  print $ processInput (take 1 input)
+  -- part 1
+  print $ processInput input
