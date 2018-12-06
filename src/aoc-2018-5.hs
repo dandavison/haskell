@@ -1,5 +1,12 @@
 import  Data.Char (isUpper, toLower, toUpper)
 
+argmin :: (Eq a, Ord b) => (a -> b) -> [a] -> a
+argmin f xs = xmin
+  where
+    [xmin] = [x | x <- xs, f x == fmin]
+    fmin = minimum (f <$> xs)
+
+
 getInput = do
   input <- getContents
   return $ trim input
@@ -10,6 +17,9 @@ trim = reverse . dropWhile (== '\n') . reverse
 
 
 part1 polymer = length $ react polymer
+
+
+part2 polymer = minimum $ length . react <$> [filter (not . ((flip elem) [u, toUpper u])) polymer | u <- ['a'..'z']]
 
 
 react :: String -> String
@@ -39,3 +49,4 @@ oppositeCase c = if isUpper c then toLower c else toUpper c
 main = do
   input <- getInput
   print $ part1 input
+  print $ part2 input
