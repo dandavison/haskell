@@ -1,4 +1,4 @@
-import  Data.Char (isUpper, toLower, toUpper)
+import  Data.Char (toLower, toUpper)
 import Test.Hspec (hspec, describe, it, shouldBe)
 
 
@@ -18,34 +18,20 @@ trim :: String -> String
 trim = reverse . dropWhile (== '\n') . reverse
 
 
-part1 polymer = length $ react polymer
-
-
-part2 polymer = minimum $ length . react <$> [filter (not . ((flip elem) [u, toUpper u])) polymer | u <- ['a'..'z']]
-
+part1 = length . react
 
 react :: String -> String
-react xs
-  | i == -1 = xs
-  | otherwise = react $ (take i xs) ++ (drop (i + 2) xs)
+react = foldr cons []
+
+cons :: Char -> [Char] -> [Char]
+cons x [] = [x]
+cons x (y:ys)
+  | x `anti` y = ys
+  | otherwise = x:y:ys
   where
-    i = indexOfReactivePair xs
+    anti x y = toLower x == toLower y && x /= y
 
-
-indexOfReactivePair :: String -> Int
-indexOfReactivePair [] = -1
-indexOfReactivePair (x:xs) = indexOfReactivePair' x 0 xs
-
-
-indexOfReactivePair' :: Char -> Int -> String -> Int
-indexOfReactivePair' _ _ [] = -1
-indexOfReactivePair' x i (x':xs)
-  | (x' == oppositeCase x) = i
-  | otherwise = indexOfReactivePair' x' (i + 1) xs
-
-
-oppositeCase :: Char -> Char
-oppositeCase c = if isUpper c then toLower c else toUpper c
+part2 polymer = minimum $ length . react <$> [filter (not . ((flip elem) [u, toUpper u])) polymer | u <- ['a'..'z']]
 
 
 test = hspec $ do
