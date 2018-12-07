@@ -1,4 +1,6 @@
 import  Data.Char (isUpper, toLower, toUpper)
+import Test.Hspec (hspec, describe, it, shouldBe)
+
 
 argmin :: (Eq a, Ord b) => (a -> b) -> [a] -> a
 argmin f xs = xmin
@@ -46,7 +48,19 @@ oppositeCase :: Char -> Char
 oppositeCase c = if isUpper c then toLower c else toUpper c
 
 
+test = hspec $ do
+  describe "test" $ do
+    let polymer = "dabAcCaCBAcCcaDA"
+
+    it "part1" $ do
+      part1 polymer `shouldBe` 10
+
+    it "part2" $ do
+      part2 polymer `shouldBe` 4
+
+
 main = do
-  input <- getInput
-  print $ part1 input
-  print $ part2 input
+  test
+  polymer <- getInput
+  print $ part1 polymer
+  print $ part2 polymer
