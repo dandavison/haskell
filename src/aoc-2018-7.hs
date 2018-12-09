@@ -39,6 +39,21 @@ parseLine line = (from, to)
 part1 = topologicalSort . makeGraph
 
 
+part2 = totalTime . makeGraph
+
+
+nWorkers :: Integer
+nWorkers = 5
+
+
+taskBaseTime :: Integer
+taskBaseTime = 60
+
+
+totalTime :: AdjacencyList -> Integer
+totalTime n2ns = 0
+
+
 topologicalSort :: AdjacencyList -> [Node]
 topologicalSort n2ns = reverse $ topologicalSort' [] n2ns
 
