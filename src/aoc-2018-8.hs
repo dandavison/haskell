@@ -27,11 +27,11 @@ data Node = Node
   }
   deriving Show
 
-parseTree :: [Int] -> Node
-parseTree [] = undefined
-parseTree (nChildren:nMetadata:rest) = Node
+parseNode :: [Int] -> Node
+parseNode [] = undefined
+parseNode (nChildren:nMetadata:rest) = Node
   { header = (nChildren, nMetadata),
-    children = parseTrees nChildren childData,
+    children = parseNodes nChildren childData,
     metadata = slice ((length rest) - nMetadata + 1) (length rest) rest,
     trailingData = rest
   }
@@ -39,16 +39,18 @@ parseTree (nChildren:nMetadata:rest) = Node
     childData = slice 0 ((length rest) - nMetadata) rest
 
 
-parseTrees :: Int -> [Int] -> [Node]
-parseTrees n treeData = parseTrees' [] n treeData
+parseNodes :: Int -> [Int] -> [Node]
+parseNodes n nodeData = parseNodes' [] n nodeData
 
-parseTrees' :: [Node] -> Int -> [Int] -> [Node]
-parseTrees' trees 0 _ = trees
-parseTrees' trees n treeData = node:(parseTrees (n - 1) (trailingData node))
+parseNodes' :: [Node] -> Int -> [Int] -> [Node]
+parseNodes' nodes n nodeData
+  | n == 0 = nodes
+  | (trailingData node) == [] = node:nodes
+  | otherwise = node:(parseNodes' nodes (n - 1) (trailingData node))
   where
-    node = parseTree treeData
+    node = parseNode nodeData
 
 main = do
-  let treeData = parseLine "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2"
-  print $ treeData
-  print $ parseTree treeData
+  let nodeData = parseLine "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2"
+  print $ nodeData
+  print $ parseNodes 1 nodeData

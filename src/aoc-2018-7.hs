@@ -1,5 +1,6 @@
 import qualified Data.Heap as  Heap
 import Data.Heap              (MinHeap)
+import Data.List (sort)
 import qualified Data.Map as   Map
 import Data.Map               (Map, (!?))
 import Data.Maybe             (fromMaybe)
@@ -39,19 +40,33 @@ parseLine line = (from, to)
 part1 = topologicalSort . makeGraph
 
 
-part2 = totalTime . makeGraph
+-- part2 = totalTime . makeGraph
 
 
-nWorkers :: Integer
-nWorkers = 5
+-- nWorkers :: Integer
+-- nWorkers = 5
 
 
-taskBaseTime :: Integer
-taskBaseTime = 60
+-- taskBaseTime :: Integer
+-- taskBaseTime = 60
 
 
-totalTime :: AdjacencyList -> Integer
-totalTime n2ns = 0
+-- totalTime :: AdjacencyList -> Integer
+-- totalTime n2ns = length $ allocateWork n2ns
+
+
+-- allocateWork n2ns = allocateWork' [] n2ns
+
+
+-- allocateWork' slots [] = slots
+-- allocateWork' slots n2ns = allocateWork (slots ++ newSlots) n2ns'
+--   where
+--     descendents = mconcat $ snd <$> n2ns
+--     next = [n | (n, ns) <- n2ns, n `notElem` descendents]
+--     n2ns' = [(n, ns) | (n, ns) <- n2ns, n `notElem` next]
+--     newSlots = (time, )
+
+
 
 
 topologicalSort :: AdjacencyList -> [Node]
@@ -67,5 +82,6 @@ topologicalSort' nodeSeq n2ns = topologicalSort' (next:nodeSeq) n2ns'
 
 
 main = do
-  points <- getInput
-  print $ part1 points
+  edges <- getInput
+  print $ sort [(n, sort ns) | (n, ns) <- makeGraph edges]
+  print $ part1 edges
