@@ -1,3 +1,5 @@
+module HaskellBook_15_SemigroupMonoid_10_Optional where
+
 import Data.Monoid  -- (Sum, getSum) -- why doesn't this work?
 import Test.Hspec (hspec, describe, it, shouldBe)
 
@@ -32,6 +34,6 @@ test = hspec $ do
       mconcat [Only (Sum 1), Only (Sum 1)] `shouldBe` Only (Sum 2)
 
 
-main = do
-  test
-  -- print $ Nada -- why does this fail?
+-- main = do
+--   test
+--   -- print $ Nada -- why does this fail?
